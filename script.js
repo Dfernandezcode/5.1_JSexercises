@@ -124,7 +124,7 @@ console.log(billionaireList);
 
 //2) Muestra por consola (true/false) si está Amancio en la lista
 
-console.log(billionaireList.includes('Amancio Ortega', 0));
+console.log(billionaireList.includes('Amancio Ortega'));
 
 //3) Muestra por consola un listado con el resultado de dividir su patrimonio entre los años que tienen
 
@@ -141,6 +141,13 @@ for (let i = 0; i < ageAmountDivided.length; i++) {
 	ageAmountDividedFixed.push(ageAmountDivided[i].toFixed(2));
 }
 console.log(ageAmountDividedFixed);
+//inefficient as shit
+
+let ageAmountDivFix = forbesList.map((person) =>
+	(person.amount / person.age).toFixed(2)
+);
+console.log(ageAmountDivFix);
+//AI optimized
 
 //4) Muestra por consola la media de edad de los 10 billonarios de la lista forbes
 
@@ -167,6 +174,14 @@ let sumTech = techEEUU.reduce((acc, elemento) => {
 
 console.log('$' + sumTech + ' billion dollars');
 
+let billionaireEEUU = forbesList.reduce((acc, element) => {
+	element.country === 'EEUU' && element.industry === 'Technology'
+		? acc + element.amount
+		: acc;
+});
+
+console.log('$' + billionaireEEUU + ' billion dollars');
+
 //6) Muestra por consola el millonario más joven que no sea de EEUU
 
 let nonUs = forbesList.filter((forbesNonUs) => forbesNonUs.country !== 'EEUU');
@@ -179,6 +194,15 @@ let youngestNonUs = listNonUs.reduce((youngest, elemento) => {
 }, {});
 
 console.log(youngestNonUs);
+//Optimized
+let youngestRich = forbesList
+	.filter((person) => person.country !== 'EEUU')
+	.reduce(
+		(acc, person) =>
+			acc.age === undefined || acc.age >= person.age ? person : acc,
+		{}
+	);
+console.log(youngestRich);
 
 //7) Muestra por consola el millonario más mayor del top 5 de millonarios de EEUU
 
@@ -191,4 +215,13 @@ listTopUs.sort((a, b) => b - a);
 
 let finalList = listTopUs.slice(0, 1);
 console.log(finalList);
+
 //8) Muestra por consola la media de edad y media de dinero de los millonarios de Google y Microsoft juntos
+
+let millGM = forbesList.filter(
+	(element) => element.company === 'Google' || element.company === 'Microsoft'
+);
+
+let acc = millGM.reduce((acc, element) => acc + element.age / millGM.length, 0);
+
+console.log(acc);
